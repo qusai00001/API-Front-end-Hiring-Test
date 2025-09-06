@@ -1,0 +1,51 @@
+# --- Node / monorepo ---
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Builds / outputs ---
+**/dist/
+**/build/
+**/.vite/
+.vite/
+**/.parcel-cache/
+**/.cache/
+**/coverage/
+
+# --- Env files (keep only .env.example in git) ---
+*.env
+*.env.local
+*.env.*.local
+
+# --- TypeScript ---
+*.tsbuildinfo
+
+# --- Lint / tool caches ---
+.eslintcache
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- Logs & runtime ---
+logs/
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# --- Frontend specific (Vite/Netlify/Vercel) ---
+.vercel/
+.netlify/
+
+# --- Backend data ---
+# Keep the empty seed file, ignore any other generated data files
+backend/data/*
+!backend/data/db.json
