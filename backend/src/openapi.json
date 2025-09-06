@@ -1,0 +1,131 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Todo API", "version": "1.0.0", "description": "Simple tasks API used for the hiring test" },
+  "servers": [
+    { "url": "http://localhost:4000", "description": "Local" }
+  ],
+  "tags": [{ "name": "Tasks" }],
+  "paths": {
+    "/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "List tasks",
+        "responses": {
+          "200": {
+            "description": "Array of tasks",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Task" } },
+                "examples": {
+                  "sample": {
+                    "value": [
+                      { "id": 1, "title": "Write docs", "description": "README + Swagger", "status": "in-progress" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create a task",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NewTask" },
+              "examples": {
+                "ok": { "value": { "title": "Ship test", "description": "Deploy to Vercel", "status": "todo" } }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created task",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Task" } } }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Task ID" }
+      ],
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Update task status",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/StatusPatch" },
+              "examples": { "ok": { "value": { "status": "done" } } }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Updated task", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Task" } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete a task",
+        "responses": {
+          "204": { "description": "Deleted" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 3 },
+          "title": { "type": "string", "maxLength": 100, "example": "Write docs" },
+          "description": { "type": "string", "maxLength": 500, "example": "README + Swagger" },
+          "status": { "type": "string", "enum": ["todo", "in-progress", "done"], "example": "in-progress" }
+        },
+        "required": ["id", "title", "status"]
+      },
+      "NewTask": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "maxLength": 100 },
+          "description": { "type": "string", "maxLength": 500 },
+          "status": { "type": "string", "enum": ["todo", "in-progress", "done"] }
+        },
+        "required": ["title", "status"]
+      },
+      "StatusPatch": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["todo", "in-progress", "done"] }
+        },
+        "required": ["status"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": { "error": { "type": "string", "example": "not found" } },
+        "required": ["error"]
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Validation error",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "NotFound": {
+        "description": "Entity not found",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      }
+    }
+  }
+}
