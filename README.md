@@ -242,4 +242,4 @@ MIT
 
 ---
 
-**Contact:** Qusai Felehan, qusaifelehanq@gmasil.com
+**Contact:** Qusai Falihan, qusaiflehanq@gmail.com
